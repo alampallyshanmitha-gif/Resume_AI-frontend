@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>ATS Checker - CareerForge AI</title>
-<base href ="/Resume-Builder-AI/">
+
 <style>
 :root {
     --primary: #6366f1;
@@ -22,14 +22,11 @@ body {
 nav {
     display:flex;
     justify-content:space-between;
-    align-items:center;
     padding:1rem 5%;
     background: var(--bg-card);
 }
 
-nav h2 {
-    color: var(--primary);
-}
+nav h2 { color: var(--primary); }
 
 nav a {
     color:white;
@@ -40,7 +37,6 @@ nav a {
 .container {
     max-width:900px;
     margin:40px auto;
-    padding:0 20px;
 }
 
 .card {
@@ -53,7 +49,6 @@ textarea {
     width:100%;
     padding:10px;
     margin-top:10px;
-    border-radius:5px;
     border:none;
     background:#0f172a;
     color:white;
@@ -67,7 +62,6 @@ button {
     border:none;
     color:white;
     cursor:pointer;
-    font-size:16px;
 }
 
 .result {
@@ -77,32 +71,24 @@ button {
     border-radius:5px;
     white-space: pre-wrap;
 }
-
-footer {
-    text-align:center;
-    padding:20px;
-    margin-top:40px;
-    color: var(--text-muted);
-}
 </style>
-
 </head>
 
 <body>
 
 <nav>
-    <h2>CareerForge AI</h2>
-    <div>
+<h2>CareerForge AI</h2>
+<div>
 <a href="index.html">Home</a>
-        <a href="resume.html">Resume</a>
-        <a href="ats.html">ATS</a>
-        <a href="portfolio.html">Portfolio</a>
-        <a href="interview.html">Interview</a>
-        <a href="jobs.html">Jobs</a>
-        <a href="ai-tools.html">AI Tools</a>
-        <a href="storytelling.html">Story</a>
-        <a href="login.html">Login</a>
-    </div>
+<a href="resume.html">Resume</a>
+<a href="ats.html">ATS</a>
+<a href="portfolio.html">Portfolio</a>
+<a href="interview.html">Interview</a>
+<a href="jobs.html">Jobs</a>
+<a href="ai-tools.html">AI Tools</a>
+<a href="storytelling.html">Story</a>
+<a href="login.html">Login</a>
+</div>
 </nav>
 
 <div class="container">
@@ -114,10 +100,10 @@ footer {
 <form id="atsForm">
 
 <label>Paste Your Resume</label>
-<textarea id="resume" rows="6" placeholder="Paste your resume here..."></textarea>
+<textarea id="resume" rows="6"></textarea>
 
 <label>Paste Job Description</label>
-<textarea id="job" rows="6" placeholder="Paste job description here..."></textarea>
+<textarea id="job" rows="6"></textarea>
 
 <button type="submit">Check ATS Score</button>
 
@@ -126,14 +112,11 @@ footer {
 <div class="result" id="result">Waiting for input...</div>
 
 </div>
-
 </div>
 
-<footer>
-    © 2026 CareerForge AI
-</footer>
-
 <script>
+const BASE = "https://resume-builder-backend-muml.onrender.com";
+
 document.getElementById('atsForm').addEventListener('submit', async function(e){
     e.preventDefault();
 
@@ -146,32 +129,30 @@ document.getElementById('atsForm').addEventListener('submit', async function(e){
     }
 
     try {
-        const response = await fetch("https://resume-builder-backend-muml.onrender.com/api/ats", {
+        const res = await fetch(BASE + "/api/ats", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                resumeText: resume,        // ✅ correct field name
-                jobDescription: job        // ✅ correct field name
+                resumeText: resume,
+                jobDescription: job
             })
         });
 
-        if(!response.ok){
-            throw new Error("Backend returned error: " + response.status);
+        const data = await res.json();
+
+        if(!res.ok){
+            throw new Error(data.error || "Server error");
         }
 
-        const data = await response.json();
+        document.getElementById('result').innerText =
+            "ATS Score: " + data.score + "%\n\n" + data.feedback;
 
-        if(data.error){
-            document.getElementById('result').innerText = data.error;
-        } else {
-            document.getElementById('result').innerText =
-                "ATS Score: " + data.score + "%\n\n" + data.feedback;
-        }
     } catch (err) {
-        document.getElementById('result').innerText = "Error connecting to backend: " + err;
+        document.getElementById('result').innerText =
+            "❌ Error: " + err.message;
     }
 });
-
 </script>
+
 </body>
 </html>

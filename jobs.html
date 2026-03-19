@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Jobs - CareerForge AI</title>
-<base href ="/Resume-Builder-AI/">
+
 <style>
 :root {
     --primary: #6366f1;
@@ -26,9 +26,7 @@ nav {
     background: var(--bg-card);
 }
 
-nav h2 {
-    color: var(--primary);
-}
+nav h2 { color: var(--primary); }
 
 nav a {
     color:white;
@@ -39,12 +37,6 @@ nav a {
 .container {
     max-width:1100px;
     margin:40px auto;
-    padding:0 20px;
-}
-
-h2 {
-    text-align:center;
-    margin-bottom:20px;
 }
 
 .grid {
@@ -57,30 +49,11 @@ h2 {
     background: var(--bg-card);
     padding:20px;
     border-radius:10px;
-    transition:0.3s;
 }
 
-.card:hover {
-    transform: translateY(-5px);
-    background:#2a3a55;
-}
-
-.card h3 {
-    color: var(--primary);
-}
-
-.type {
-    margin-top:10px;
-    font-weight:bold;
-}
-
-.intern {
-    color: #22c55e;
-}
-
-.job {
-    color: #facc15;
-}
+.type { margin-top:10px; font-weight:bold; }
+.intern { color: #22c55e; }
+.job { color: #facc15; }
 
 button {
     margin-top:10px;
@@ -90,38 +63,25 @@ button {
     border:none;
     color:white;
     cursor:pointer;
-    border-radius:5px;
-    transition:0.3s;
-}
-
-button:hover {
-    background:#4f46e5;
-}
-
-footer {
-    text-align:center;
-    padding:20px;
-    margin-top:40px;
-    color: var(--text-muted);
 }
 </style>
-
 </head>
 
 <body>
 
 <nav>
-    <h2>CareerForge AI</h2>
-    <div>
-        <a href="index.html">Home</a>
-        <a href="resume.html">Resume</a>
-        <a href="ats.html">ATS</a>
-        <a href="portfolio.html">Portfolio</a>
-        <a href="interview.html">Interview</a>
-        <a href="jobs.html">Jobs</a>
-        <a href="ai-tools.html">AI Tools</a>
-        <a href="storytelling.html">Story</a>
-        <a href="login.html">Login</a>
+<h2>CareerForge AI</h2>
+<div>
+<a href="index.html">Home</a>
+<a href="resume.html">Resume</a>
+<a href="ats.html">ATS</a>
+<a href="portfolio.html">Portfolio</a>
+<a href="interview.html">Interview</a>
+<a href="jobs.html">Jobs</a>
+<a href="ai-tools.html">AI Tools</a>
+<a href="storytelling.html">Story</a>
+<a href="login.html">Login</a>
+</div>
 </nav>
 
 <div class="container">
@@ -129,48 +89,47 @@ footer {
 <h2>💼 Jobs & Internships</h2>
 
 <div class="grid" id="jobsList">
-    Loading jobs...
+Loading jobs...
 </div>
 
 </div>
-
-<footer>
-    © 2026 CareerForge AI
-</footer>
 
 <script>
+const BASE = "https://resume-builder-backend-muml.onrender.com";
+
 async function loadJobs() {
     const jobsList = document.getElementById("jobsList");
-    jobsList.innerHTML = "Loading jobs...";
-try {
-  const res = await fetch("https://resume-builder-backend-muml.onrender.com/api/jobs");
-  if (!res.ok) throw new Error("Failed to fetch jobs from backend");
 
-  const data = await res.json();
+    try {
+        const res = await fetch(BASE + "/api/jobs");
+        const data = await res.json();
 
-  let html = "";
-  data.jobs.forEach(job => {
-    html += `
-      <div class="card">
-        <h3>${job.title}</h3>
-        <p>${job.company}</p>
-        <p>${job.location}</p>
-        <p class="type ${job.type === 'Internship' ? 'intern' : 'job'}">${job.type}</p>
-        <a href="${job.applyLink}" target="_blank">
-          <button>Apply Now 🚀</button>
-        </a>
-      </div>
-    `;
-  });
+        if(!data.jobs || data.jobs.length === 0){
+            jobsList.innerHTML = "<p>No jobs available yet.</p>";
+            return;
+        }
 
-  jobsList.innerHTML = html;
-} catch (err) {
-  jobsList.innerHTML = "<p style='color:red'>❌ Error connecting to backend. Make sure server is running.</p>";
-  console.error(err);
+        let html = "";
+        data.jobs.forEach(job => {
+            html += `
+            <div class="card">
+                <h3>${job.title}</h3>
+                <p>${job.company}</p>
+                <p>${job.location}</p>
+                <p class="type ${job.type === 'Internship' ? 'intern' : 'job'}">${job.type}</p>
+                <a href="${job.applyLink}" target="_blank">
+                    <button>Apply Now 🚀</button>
+                </a>
+            </div>`;
+        });
+
+        jobsList.innerHTML = html;
+
+    } catch (err) {
+        jobsList.innerHTML = "<p style='color:red'>❌ Failed to load jobs</p>";
+    }
 }
-}
 
-// Load jobs when page loads
 window.onload = loadJobs;
 </script>
 

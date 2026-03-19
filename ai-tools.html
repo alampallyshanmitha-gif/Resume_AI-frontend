@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>AI Tools - CareerForge AI</title>
-<base href ="/Resume-Builder-AI/">
+
 <style>
 :root {
     --primary: #6366f1;
@@ -26,30 +26,17 @@ nav {
     background: var(--bg-card);
 }
 
-nav h2 {
-    color: var(--primary);
-}
+nav h2 { color: var(--primary); }
 
 nav a {
     color:white;
     text-decoration:none;
     margin-left:15px;
-    transition:0.3s;
-}
-
-nav a:hover {
-    color: var(--primary);
 }
 
 .container {
     max-width:1100px;
     margin:40px auto;
-    padding:0 20px;
-}
-
-h2 {
-    margin-bottom:20px;
-    color: var(--primary);
 }
 
 .grid {
@@ -62,22 +49,7 @@ h2 {
     background: var(--bg-card);
     padding:20px;
     border-radius:10px;
-    transition:0.3s;
     text-align:center;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    background:#2a3a55;
-}
-
-.card h3 {
-    color: var(--primary);
-    margin-bottom:10px;
-}
-
-.card p {
-    color: var(--text-muted);
 }
 
 button {
@@ -88,87 +60,76 @@ button {
     border:none;
     color:white;
     cursor:pointer;
-    border-radius:5px;
-    font-weight:500;
-    transition:0.3s;
-}
-
-button:hover {
-    background: #4f46e5;
 }
 
 footer {
     text-align:center;
     padding:20px;
-    margin-top:40px;
-    color: var(--text-muted);
 }
 </style>
-
 </head>
 
 <body>
 
 <nav>
-    <h2>CareerForge AI</h2>
-    <div>
- <a href="index.html">Home</a>
-        <a href="resume.html">Resume</a>
-        <a href="ats.html">ATS</a>
-        <a href="portfolio.html">Portfolio</a>
-        <a href="interview.html">Interview</a>
-        <a href="jobs.html">Jobs</a>
-        <a href="ai-tools.html">AI Tools</a>
-        <a href="storytelling.html">Story</a>
-        <a href="login.html">Login</a>
-    </div>
+<h2>CareerForge AI</h2>
+<div>
+<a href="index.html">Home</a>
+<a href="resume.html">Resume</a>
+<a href="ats.html">ATS</a>
+<a href="portfolio.html">Portfolio</a>
+<a href="interview.html">Interview</a>
+<a href="jobs.html">Jobs</a>
+<a href="ai-tools.html">AI Tools</a>
+<a href="storytelling.html">Story</a>
+<a href="login.html">Login</a>
+</div>
 </nav>
 
 <div class="container">
-
 <h2>Top AI Tools 🌐</h2>
-
 <div class="grid" id="aiGrid">
-    <p>Loading AI tools...</p>
+<p>Loading AI tools...</p>
+</div>
 </div>
 
-</div>
-
-<footer>
-    © 2026 CareerForge AI
-</footer>
+<footer>© 2026 CareerForge AI</footer>
 
 <script>
-// Fetch AI tools from backend
+const BASE = "https://resume-builder-backend-muml.onrender.com";
 const aiGrid = document.getElementById("aiGrid");
 
 async function loadAITools() {
     try {
-       // const res = await fetch("https://resume-builder-backend-muml.onrender.com/api/ai-tools");
-       const res = await fetch("https://resume-builder-backend-muml.onrender.com/api/aitools");
+        const res = await fetch(BASE + "/api/aitools");
+        const data = await res.json();
 
-        if(!res.ok) throw new Error("Failed to fetch AI tools");
-        const tools = await res.json();
+        aiGrid.innerHTML = "";
 
-        aiGrid.innerHTML = ""; // clear loading text
+        if (!data.tools || data.tools.length === 0) {
+            aiGrid.innerHTML = "<p>No AI tools available yet.</p>";
+            return;
+        }
 
-        tools.forEach(tool => {
+        data.tools.forEach(tool => {
             const card = document.createElement("div");
             card.className = "card";
+
             card.innerHTML = `
                 <h3>${tool.name}</h3>
                 <p>${tool.description}</p>
                 <button onclick="window.open('${tool.url}', '_blank')">Open</button>
             `;
+
             aiGrid.appendChild(card);
         });
+
     } catch (err) {
-        aiGrid.innerHTML = "<p style='color:red'>Failed to load AI tools.</p>";
+        aiGrid.innerHTML = "<p style='color:red'>Failed to load AI tools ❌</p>";
         console.error(err);
     }
 }
 
-// Load tools when page loads
 window.onload = loadAITools;
 </script>
 
