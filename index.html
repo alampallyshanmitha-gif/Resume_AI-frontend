@@ -118,19 +118,30 @@ function go(page){
 async function checkBackend() {
     const statusEl = document.getElementById("output");
 
-    try {
-        const res = await fetch("https://resume-builder-backend-muml.onrender.com/api/resume");
+ try {
+  const response = await fetch("https://resume-builder-backend-muml.onrender.com/api/resume", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name: nameValue,
+      email: emailValue,
+      phone: phoneValue,
+      education: educationValue,
+      skills: skillsValue,
+      experience: experienceValue
+    })
+  });
 
-        if (!res.ok) throw new Error("Status: " + res.status);
+  if (!response.ok) {
+    throw new Error("Backend returned error: " + response.status);
+  }
 
-        const data = await res.json();
-
-        statusEl.textContent = "✅ Backend Connected Successfully\n" + JSON.stringify(data, null, 2);
-
-    } catch (err) {
-        statusEl.textContent = "❌ Backend Error:\n" + err.message + 
-        "\n\nPossible reasons:\n- CORS not enabled\n- Wrong API route\n- Backend sleeping (Render free)";
-    }
+  const data = await response.json();
+  console.log("Resume generated:", data);
+  // You can display data.resume or whatever your backend returns
+} catch (err) {
+  console.error("Error connecting to backend:", err);
+}
 }
 
 window.onload = checkBackend;

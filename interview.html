@@ -42,7 +42,9 @@ async function loadQuestions() {
     questionsList.innerHTML = "Loading questions...";
 
     try {
-        const res = await fetch(`https://resume-builder-backend-muml.onrender.com//api/interview/${role}`);
+        //const res = await fetch(`https://resume-builder-backend-muml.onrender.com//api/interview/${role}`);
+        const res = await fetch(`https://resume-builder-backend-muml.onrender.com/api/interview/${role}`);
+
         if(!res.ok) throw new Error("Failed to fetch questions");
         const data = await res.json();
 

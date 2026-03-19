@@ -113,15 +113,15 @@ footer {
 <nav>
     <h2>CareerForge AI</h2>
     <div>
-        <a href="/ Resume-Builder-AI/index.html">Home</a>
-        <a href="/ Resume-Builder-AI/resume.html">Resume</a>
-        <a href="/ Resume-Builder-AI/ats.html">ATS</a>
-        <a href="/ Resume-Builder-AI/portfolio.html">Portfolio</a>
-        <a href="/ Resume-Builder-AI/interview.html">Interview</a>
-        <a href="/ Resume-Builder-AI/jobs.html">Jobs</a>
-        <a href="/ Resume-Builder-AI/ai-tools.html">AI Tools</a>
-        <a href="/ Resume-Builder-AI/storytelling.html">Story</a>
-        <a href="/ Resume-Builder-AI/login.html">Login</a>
+        <a href="index.html">Home</a>
+        <a href="resume.html">Resume</a>
+        <a href="ats.html">ATS</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="interview.html">Interview</a>
+        <a href="jobs.html">Jobs</a>
+        <a href="ai-tools.html">AI Tools</a>
+        <a href="storytelling.html">Story</a>
+        <a href="login.html">Login</a>
 </nav>
 
 <div class="container">
@@ -142,37 +142,32 @@ footer {
 async function loadJobs() {
     const jobsList = document.getElementById("jobsList");
     jobsList.innerHTML = "Loading jobs...";
+try {
+  const res = await fetch("https://resume-builder-backend-muml.onrender.com/api/jobs");
+  if (!res.ok) throw new Error("Failed to fetch jobs from backend");
 
-    try {
-        // Correct API endpoint for jobs
-        const res = await fetch("https://resume-builder-backend-muml.onrender.com/api/jobs");
-        if(!res.ok) throw new Error("Failed to fetch jobs from backend");
+  const data = await res.json();
 
-        const data = await res.json();
+  let html = "";
+  data.jobs.forEach(job => {
+    html += `
+      <div class="card">
+        <h3>${job.title}</h3>
+        <p>${job.company}</p>
+        <p>${job.location}</p>
+        <p class="type ${job.type === 'Internship' ? 'intern' : 'job'}">${job.type}</p>
+        <a href="${job.applyLink}" target="_blank">
+          <button>Apply Now 🚀</button>
+        </a>
+      </div>
+    `;
+  });
 
-        let html = "";
-        data.jobs.forEach(job => {
-            html += `
-                <div class="card">
-                    <h3>${job.title}</h3>
-                    <p>${job.company}</p>
-                    <p>${job.location}</p>
-                    <p class="type ${job.type === 'Internship' ? 'intern' : 'job'}">
-                        ${job.type}
-                    </p>
-                    <a href="${job.applyLink}" target="_blank">
-                        <button>Apply Now 🚀</button>
-                    </a>
-                </div>
-            `;
-        });
-
-        jobsList.innerHTML = html;
-
-    } catch(err) {
-        jobsList.innerHTML = "<p style='color:red'>❌ Error connecting to backend. Make sure server is running.</p>";
-        console.error(err);
-    }
+  jobsList.innerHTML = html;
+} catch (err) {
+  jobsList.innerHTML = "<p style='color:red'>❌ Error connecting to backend. Make sure server is running.</p>";
+  console.error(err);
+}
 }
 
 // Load jobs when page loads

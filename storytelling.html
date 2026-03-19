@@ -96,15 +96,15 @@ footer {
 <nav>
     <h2>CareerForge AI</h2>
     <div>
-<a href="/ Resume-Builder-AI/index.html">Home</a>
-        <a href="/ Resume-Builder-AI/resume.html">Resume</a>
-        <a href="/ Resume-Builder-AI/ats.html">ATS</a>
-        <a href="/ Resume-Builder-AI/portfolio.html">Portfolio</a>
-        <a href="/ Resume-Builder-AI/interview.html">Interview</a>
-        <a href="/ Resume-Builder-AI/jobs.html">Jobs</a>
-        <a href="/ Resume-Builder-AI/ai-tools.html">AI Tools</a>
-        <a href="/ Resume-Builder-AI/storytelling.html">Story</a>
-        <a href="/ Resume-Builder-AI/login.html">Login</a>
+<a href="index.html">Home</a>
+        <a href="resume.html">Resume</a>
+        <a href="ats.html">ATS</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="interview.html">Interview</a>
+        <a href="jobs.html">Jobs</a>
+        <a href="ai-tools.html">AI Tools</a>
+        <a href="storytelling.html">Story</a>
+        <a href="login.html">Login</a>
     </div>
 </nav>
 
@@ -133,7 +133,6 @@ footer {
 <footer>
     © 2026 CareerForge AI
 </footer>
-
 <script>
 async function generateStory(){
     const topic = document.getElementById("topic").value.trim();
@@ -156,6 +155,10 @@ async function generateStory(){
             body: JSON.stringify({ topic, type })
         });
 
+        if (!response.ok) {
+            throw new Error("Backend returned error: " + response.status);
+        }
+
         const result = await response.json();
         output.innerText = result.story || "No story generated.";
     } catch (err) {
@@ -165,6 +168,5 @@ async function generateStory(){
     }
 }
 </script>
-
 </body>
 </html>
