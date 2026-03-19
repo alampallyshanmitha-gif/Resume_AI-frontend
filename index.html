@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>CareerForge AI</title>
-<base href ="/Resume-Builder-AI/">
+
 <style>
 :root {
     --primary: #6366f1;
@@ -27,19 +27,12 @@ nav {
     background: var(--bg-card);
 }
 
-nav h2 {
-    color: var(--primary);
-}
+nav h2 { color: var(--primary); }
 
 nav a {
     color:white;
     text-decoration:none;
     margin-left:15px;
-    transition:0.3s;
-}
-
-nav a:hover {
-    color: var(--primary);
 }
 
 .container {
@@ -48,19 +41,7 @@ nav a:hover {
     padding:0 20px;
 }
 
-.hero {
-    text-align:center;
-    margin-bottom:50px;
-}
-
-.hero h1 {
-    font-size:40px;
-    color: var(--primary);
-}
-
-.hero p {
-    color: var(--text-muted);
-}
+.hero { text-align:center; margin-bottom:50px; }
 
 .grid {
     display:grid;
@@ -73,42 +54,16 @@ nav a:hover {
     padding:20px;
     border-radius:10px;
     text-align:center;
-    transition:0.3s;
     cursor:pointer;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    background:#2a3a55;
-}
-
-.card h3 {
-    margin-bottom:10px;
-    color: var(--primary);
-}
-
-.card p {
-    color: var(--text-muted);
-}
-
-footer {
-    text-align:center;
-    padding:20px;
-    margin-top:40px;
-    color: var(--text-muted);
 }
 
 pre#output {
     background:#0f172a;
     padding:15px;
     border-radius:5px;
-    color: var(--text-main);
-    white-space: pre-wrap;
     margin-top:30px;
-    text-align:center;
 }
 </style>
-
 </head>
 
 <body>
@@ -116,15 +71,15 @@ pre#output {
 <nav>
     <h2>CareerForge AI</h2>
     <div>
-        <a href="/ Resume-Builder-AI/index.html">Home</a>
-        <a href="/ Resume-Builder-AI/resume.html">Resume</a>
-        <a href="/ Resume-Builder-AI/ats.html">ATS</a>
-        <a href="/ Resume-Builder-AI/portfolio.html">Portfolio</a>
-        <a href="/ Resume-Builder-AI/interview.html">Interview</a>
-        <a href="/ Resume-Builder-AI/jobs.html">Jobs</a>
-        <a href="/ Resume-Builder-AI/ai-tools.html">AI Tools</a>
-        <a href="/ Resume-Builder-AI/storytelling.html">Story</a>
-        <a href="/ Resume-Builder-AI/login.html">Login</a>
+        <a href="index.html">Home</a>
+        <a href="resume.html">Resume</a>
+        <a href="ats.html">ATS</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="interview.html">Interview</a>
+        <a href="jobs.html">Jobs</a>
+        <a href="ai-tools.html">AI Tools</a>
+        <a href="storytelling.html">Story</a>
+        <a href="login.html">Login</a>
     </div>
 </nav>
 
@@ -136,47 +91,22 @@ pre#output {
 </div>
 
 <div class="grid">
-    <div class="card" onclick="go('resume.html')">
-        <h3>Resume Builder</h3>
-        <p>Create professional resumes instantly</p>
-    </div>
-    <div class="card" onclick="go('ats.html')">
-        <h3>ATS Checker</h3>
-        <p>Check your resume score</p>
-    </div>
-    <div class="card" onclick="go('portfolio.html')">
-        <h3>Portfolio Builder</h3>
-        <p>Generate your portfolio website</p>
-    </div>
-    <div class="card" onclick="go('interview.html')">
-        <h3>Interview Prep</h3>
-        <p>Practice interview questions</p>
-    </div>
-    <div class="card" onclick="go('jobs.html')">
-        <h3>Jobs</h3>
-        <p>Find internships & jobs</p>
-    </div>
-    <div class="card" onclick="go('ai-tools.html')">
-        <h3>AI Tools</h3>
-        <p>Use smart AI features</p>
-    </div>
-    <div class="card" onclick="go('storytelling.html')">
-        <h3>Storytelling</h3>
-        <p>Create stories with AI</p>
-    </div>
-    <div class="card" onclick="go('login.html')">
-        <h3>Login</h3>
-        <p>Access your account</p>
-    </div>
+    <div class="card" onclick="go('resume.html')"><h3>Resume Builder</h3></div>
+    <div class="card" onclick="go('ats.html')"><h3>ATS Checker</h3></div>
+    <div class="card" onclick="go('portfolio.html')"><h3>Portfolio Builder</h3></div>
+    <div class="card" onclick="go('interview.html')"><h3>Interview Prep</h3></div>
+    <div class="card" onclick="go('jobs.html')"><h3>Jobs</h3></div>
+    <div class="card" onclick="go('ai-tools.html')"><h3>AI Tools</h3></div>
+    <div class="card" onclick="go('storytelling.html')"><h3>Storytelling</h3></div>
+    <div class="card" onclick="go('login.html')"><h3>Login</h3></div>
 </div>
 
-<!-- Backend connection status -->
 <pre id="output">Checking backend connection...</pre>
 
 </div>
 
 <footer>
-    © 2026 CareerForge AI | Built by You 💯
+    © 2026 CareerForge AI
 </footer>
 
 <script>
@@ -184,15 +114,22 @@ function go(page){
     window.location.href = page;
 }
 
-// Test backend connection when homepage loads
+// ✅ FIXED BACKEND CONNECTION
 async function checkBackend() {
     const statusEl = document.getElementById("output");
+
     try {
-        const res = await fetch("https://resume-builder-ai-1.onrender.com/");
-        const data = await res.text(); // root route usually returns text
-        statusEl.textContent = "✅ Backend is live: " + data;
+        const res = await fetch("https://resume-builder-ai-1.onrender.com/api/resume");
+
+        if (!res.ok) throw new Error("Status: " + res.status);
+
+        const data = await res.json();
+
+        statusEl.textContent = "✅ Backend Connected Successfully\n" + JSON.stringify(data, null, 2);
+
     } catch (err) {
-        statusEl.textContent = "❌ Backend connection failed: " + err;
+        statusEl.textContent = "❌ Backend Error:\n" + err.message + 
+        "\n\nPossible reasons:\n- CORS not enabled\n- Wrong API route\n- Backend sleeping (Render free)";
     }
 }
 
