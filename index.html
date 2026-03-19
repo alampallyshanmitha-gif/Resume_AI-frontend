@@ -119,7 +119,7 @@ async function checkBackend() {
     const statusEl = document.getElementById("output");
 
     try {
-        const res = await fetch("https://resume-builder-ai-1.onrender.com/api/resume");
+        const res = await fetch("https://resume-builder-backend-muml.onrender.com/api/resume");
 
         if (!res.ok) throw new Error("Status: " + res.status);
 

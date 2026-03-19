@@ -144,7 +144,7 @@ const aiGrid = document.getElementById("aiGrid");
 
 async function loadAITools() {
     try {
-        const res = await fetch("https://resume-builder-ai-1.onrender.com/api/ai-tools");
+        const res = await fetch("https://resume-builder-backend-muml.onrender.com//api/ai-tools");
         if(!res.ok) throw new Error("Failed to fetch AI tools");
         const tools = await res.json();
 

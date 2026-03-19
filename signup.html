@@ -166,7 +166,7 @@ async function signup(){
 
     try {
         // Use your Render backend URL instead of localhost
-        const response = await fetch("https://resume-builder-ai-1.onrender.com/api/signup", {
+        const response = await fetch("https://resume-builder-backend-muml.onrender.com/api/signup", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ name, email, password })

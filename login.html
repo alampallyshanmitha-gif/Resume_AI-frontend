@@ -156,8 +156,8 @@ async function handleAuth(){
 
     // Use correct backend endpoints
     const endpoint = isLogin 
-        ? "https://resume-builder-ai-1.onrender.com/api/login" 
-        : "https://resume-builder-ai-1.onrender.com/api/signup";
+        ? "https://resume-builder-backend-muml.onrender.com/api/login" 
+        : "https://resume-builder-backend-muml.onrender.com/api/signup";
 
     try {
         const response = await fetch(endpoint, {

@@ -145,7 +145,7 @@ async function loadJobs() {
 
     try {
         // Correct API endpoint for jobs
-        const res = await fetch("https://resume-builder-ai-1.onrender.com/api/jobs");
+        const res = await fetch("https://resume-builder-backend-muml.onrender.com/api/jobs");
         if(!res.ok) throw new Error("Failed to fetch jobs from backend");
 
         const data = await res.json();
