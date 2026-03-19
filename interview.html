@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Interview Prep - CareerForge AI</title>
+<base href ="/Resume-Builder-AI/">
+<style>
+body { background:#0f172a; color:white; font-family:Arial; }
+.container { max-width:800px; margin:auto; padding:20px; }
+.card { background:#1e293b; padding:15px; margin:10px 0; border-radius:10px; cursor:pointer; transition:0.3s; }
+.card:hover { background:#2a3a55; }
+.answer { display:none; margin-top:10px; color:#94a3b8; }
+button, select { padding:10px; margin-top:10px; width:100%; border:none; border-radius:5px; cursor:pointer; background:#6366f1; color:white; font-weight:500; }
+button:hover { background:#4f46e5; }
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>🎤 Interview Prep</h2>
+
+<select id="role">
+    <option value="frontend">Frontend Developer</option>
+    <option value="commerce">Commerce</option>
+    <option value="ai">AI / Data</option>
+    <option value="backend">Backend Developer</option>
+    <option value="fullstack">Full Stack Developer</option>
+</select>
+
+<button onclick="loadQuestions()">Get Questions</button>
+
+<div id="questionsList"></div>
+
+</div>
+
+<script>
+async function loadQuestions() {
+    const role = document.getElementById("role").value;
+    const questionsList = document.getElementById("questionsList");
+    questionsList.innerHTML = "Loading questions...";
+
+    try {
+        const res = await fetch(`https://resume-builder-ai-1.onrender.com/api/interview/${role}`);
+        if(!res.ok) throw new Error("Failed to fetch questions");
+        const data = await res.json();
+
+        let html = "";
+        data.questions.forEach((q, i) => {
+            html += `
+                <div class="card" onclick="toggle(${i})">
+                    <b>Q${i+1}: ${q.question}</b>
+                    <div class="answer" id="a${i}">${q.answer}</div>
+                </div>
+            `;
+        });
+
+        questionsList.innerHTML = html;
+    } catch(err) {
+        questionsList.innerHTML = `<p style="color:red;">Error loading questions: ${err}</p>`;
+    }
+}
+
+function toggle(i){
+    const el = document.getElementById("a"+i);
+    el.style.display = el.style.display === "block" ? "none" : "block";
+}
+</script>
+
+</body>
+</html>

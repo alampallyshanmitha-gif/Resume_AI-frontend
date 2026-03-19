@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Resume Builder - CareerForge AI</title>
+<base href ="/Resume-Builder-AI/">
+<!-- PDF Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<style>
+:root {
+    --primary: #6366f1;
+    --bg-dark: #0f172a;
+    --bg-card: #1e293b;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+}
+
+body {
+    margin:0;
+    font-family: Arial;
+    background: var(--bg-dark);
+    color: var(--text-main);
+}
+
+nav {
+    display:flex;
+    justify-content:space-between;
+    padding:1rem 5%;
+    background: var(--bg-card);
+}
+
+nav h2 {
+    color: var(--primary);
+}
+
+nav a {
+    color:white;
+    text-decoration:none;
+    margin-left:15px;
+}
+
+nav a:hover {
+    color: var(--primary);
+}
+
+.container {
+    max-width:900px;
+    margin:40px auto;
+    padding:0 20px;
+}
+
+h2 {
+    text-align:center;
+    color: var(--primary);
+    margin-bottom:20px;
+}
+
+.card {
+    background: var(--bg-card);
+    padding:20px;
+    border-radius:10px;
+}
+
+input, textarea {
+    width:100%;
+    padding:10px;
+    margin-top:10px;
+    border-radius:5px;
+    border:none;
+    background:#0f172a;
+    color:white;
+}
+
+button {
+    margin-top:15px;
+    padding:10px;
+    width:100%;
+    background: var(--primary);
+    border:none;
+    color:white;
+    cursor:pointer;
+    font-weight:500;
+    border-radius:5px;
+    transition:0.3s;
+}
+
+button:hover {
+    background:#4f46e5;
+}
+
+.resume-preview {
+    margin-top:20px;
+    padding:20px;
+    background:white;
+    color:black;
+    border-radius:5px;
+    white-space: pre-wrap;
+}
+
+.resume-preview h2, .resume-preview h3 {
+    color: var(--primary);
+}
+
+footer {
+    text-align:center;
+    padding:20px;
+    margin-top:40px;
+    color: var(--text-muted);
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+    <h2>CareerForge AI</h2>
+    <div>
+<a href="/ Resume-Builder-AI/index.html">Home</a>
+        <a href="/ Resume-Builder-AI/resume.html">Resume</a>
+        <a href="/ Resume-Builder-AI/ats.html">ATS</a>
+        <a href="/ Resume-Builder-AI/portfolio.html">Portfolio</a>
+        <a href="/ Resume-Builder-AI/interview.html">Interview</a>
+        <a href="/ Resume-Builder-AI/jobs.html">Jobs</a>
+        <a href="/ Resume-Builder-AI/ai-tools.html">AI Tools</a>
+        <a href="/ Resume-Builder-AI/storytelling.html">Story</a>
+        <a href="/ Resume-Builder-AI/login.html">Login</a>
+    </div>
+</nav>
+
+<div class="container">
+
+<h2>Resume Builder 📄</h2>
+
+<div class="card">
+
+<input type="text" id="name" placeholder="Full Name" required>
+<input type="text" id="email" placeholder="Email" required>
+<input type="text" id="phone" placeholder="Phone">
+<textarea id="education" placeholder="Education"></textarea>
+<textarea id="skills" placeholder="Skills (comma separated)"></textarea>
+<textarea id="experience" placeholder="Experience"></textarea>
+
+<button onclick="generateResume()">Generate Resume</button>
+<button onclick="downloadPDF()">Download PDF</button>
+
+<div id="resume" class="resume-preview"></div>
+
+</div>
+
+</div>
+
+<footer>
+    © 2026 CareerForge AI
+</footer>
+
+<script>
+async function generateResume(){
+    const data = {
+        name: document.getElementById("name").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        education: document.getElementById("education").value.trim(),
+        skills: document.getElementById("skills").value.split(",").map(s=>s.trim()).filter(s=>s),
+        experience: document.getElementById("experience").value.trim()
+    };
+
+    if(!data.name || !data.email){
+        alert("Please fill Name and Email fields!");
+        return;
+    }
+
+    try {
+        const response = await fetch("https://resume-builder-ai-1.onrender.com/api/resume", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if(result.error){
+            document.getElementById("resume").innerText = "Error: " + result.error;
+            return;
+        }
+
+        // Render resume
+        const resume = result.resume;
+        document.getElementById("resume").innerHTML = `
+            <h2>${resume.name}</h2>
+            <p>${resume.email}${resume.phone ? " | " + resume.phone : ""}</p>
+
+            <h3>Education</h3>
+            <p>${resume.education}</p>
+
+            <h3>Skills</h3>
+            <p>${resume.skills.join(", ")}</p>
+
+            <h3>Experience</h3>
+            <p>${resume.experience}</p>
+
+            <h3>Generated At</h3>
+            <p>${resume.generatedAt}</p>
+        `;
+    } catch(err) {
+        document.getElementById("resume").innerText = "Error connecting to backend: " + err;
+    }
+}
+
+function downloadPDF(){
+    const element = document.getElementById("resume");
+    if(!element.innerHTML){
+        alert("Generate resume first!");
+        return;
+    }
+    html2pdf().from(element).save("resume.pdf");
+}
+</script>
+
+</body>
+</html>

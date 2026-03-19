@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login - CareerForge AI</title>
+<base href ="/Resume-Builder-AI/">
+<style>
+:root {
+    --primary: #6366f1;
+    --bg-dark: #0f172a;
+    --bg-card: #1e293b;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+}
+
+body {
+    margin:0;
+    font-family: Arial;
+    background: var(--bg-dark);
+    color: var(--text-main);
+}
+
+nav {
+    display:flex;
+    justify-content:space-between;
+    padding:1rem 5%;
+    background: var(--bg-card);
+}
+
+nav h2 {
+    color: var(--primary);
+}
+
+nav a {
+    color:white;
+    text-decoration:none;
+    margin-left:15px;
+}
+
+.container {
+    max-width:400px;
+    margin:60px auto;
+}
+
+.card {
+    background: var(--bg-card);
+    padding:25px;
+    border-radius:10px;
+}
+
+input {
+    width:100%;
+    padding:10px;
+    margin-top:10px;
+    border-radius:5px;
+    border:none;
+    background:#0f172a;
+    color:white;
+}
+
+button {
+    margin-top:15px;
+    padding:10px;
+    width:100%;
+    background: var(--primary);
+    border:none;
+    color:white;
+    cursor:pointer;
+}
+
+.switch {
+    margin-top:15px;
+    text-align:center;
+    color: var(--text-muted);
+    cursor:pointer;
+}
+
+.result {
+    margin-top:15px;
+    padding:10px;
+    background:black;
+    border-radius:5px;
+    white-space: pre-wrap;
+}
+
+footer {
+    text-align:center;
+    padding:20px;
+    margin-top:40px;
+    color: var(--text-muted);
+}
+</style>
+
+</head>
+
+<body>
+
+<nav>
+    <h2>CareerForge AI</h2>
+    <div>
+        <a href="/ Resume-Builder-AI/index.html">Home</a>
+        <a href="/ Resume-Builder-AI/resume.html">Resume</a>
+        <a href="/ Resume-Builder-AI/ats.html">ATS</a>
+        <a href="/ Resume-Builder-AI/portfolio.html">Portfolio</a>
+        <a href="/ Resume-Builder-AI/interview.html">Interview</a>
+        <a href="/ Resume-Builder-AI/jobs.html">Jobs</a>
+        <a href="/ Resume-Builder-AI/ai-tools.html">AI Tools</a>
+        <a href="/ Resume-Builder-AI/storytelling.html">Story</a>
+        <a href="/ Resume-Builder-AI/login.html">Login</a>
+    </div>
+</nav>
+
+<div class="container">
+
+<div class="card">
+
+<h2 id="title">Login</h2>
+
+<input type="email" id="email" placeholder="Email">
+<input type="password" id="password" placeholder="Password">
+
+<button onclick="handleAuth()">Login</button>
+
+<div class="switch" onclick="toggleMode()">
+    Don't have an account? Sign up
+</div>
+
+<div class="result" id="result"></div>
+
+</div>
+
+</div>
+
+<footer>
+    © 2026 CareerForge AI
+</footer>
+
+<script>
+let isLogin = true;
+
+function toggleMode(){
+    isLogin = !isLogin;
+    document.getElementById("title").innerText = isLogin ? "Login" : "Sign Up";
+    document.querySelector("button").innerText = isLogin ? "Login" : "Sign Up";
+    document.querySelector(".switch").innerText = 
+        isLogin ? "Don't have an account? Sign up" : "Already have an account? Login";
+}
+
+async function handleAuth(){
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    if(!email || !password){
+        document.getElementById("result").innerText = "Please fill all fields!";
+        return;
+    }
+
+    // Use correct backend endpoints
+    const endpoint = isLogin 
+        ? "https://resume-builder-ai-1.onrender.com/api/login" 
+        : "https://resume-builder-ai-1.onrender.com/api/signup";
+
+    try {
+        const response = await fetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password })
+        });
+
+        const result = await response.json();
+
+        if(result.success){
+            // Save user in localStorage
+            localStorage.setItem("user", JSON.stringify(result.user));
+
+            // Redirect to account page
+            window.location.href = "account.html";
+        } else {
+            document.getElementById("result").innerText = result.message;
+        }
+
+    } catch (err) {
+        document.getElementById("result").innerText = "Error connecting to backend: " + err;
+    }
+}
+
+// Auto-redirect if user is already logged in
+window.onload = function(){
+    const user = localStorage.getItem("user");
+    if(user) window.location.href = "account.html";
+}
+</script>
+
+</body>
+</html>

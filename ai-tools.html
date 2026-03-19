@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>AI Tools - CareerForge AI</title>
+<base href ="/Resume-Builder-AI/">
+<style>
+:root {
+    --primary: #6366f1;
+    --bg-dark: #0f172a;
+    --bg-card: #1e293b;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+}
+
+body {
+    margin:0;
+    font-family: Arial;
+    background: var(--bg-dark);
+    color: var(--text-main);
+}
+
+nav {
+    display:flex;
+    justify-content:space-between;
+    padding:1rem 5%;
+    background: var(--bg-card);
+}
+
+nav h2 {
+    color: var(--primary);
+}
+
+nav a {
+    color:white;
+    text-decoration:none;
+    margin-left:15px;
+    transition:0.3s;
+}
+
+nav a:hover {
+    color: var(--primary);
+}
+
+.container {
+    max-width:1100px;
+    margin:40px auto;
+    padding:0 20px;
+}
+
+h2 {
+    margin-bottom:20px;
+    color: var(--primary);
+}
+
+.grid {
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
+    gap:20px;
+}
+
+.card {
+    background: var(--bg-card);
+    padding:20px;
+    border-radius:10px;
+    transition:0.3s;
+    text-align:center;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    background:#2a3a55;
+}
+
+.card h3 {
+    color: var(--primary);
+    margin-bottom:10px;
+}
+
+.card p {
+    color: var(--text-muted);
+}
+
+button {
+    margin-top:10px;
+    padding:8px;
+    width:100%;
+    background: var(--primary);
+    border:none;
+    color:white;
+    cursor:pointer;
+    border-radius:5px;
+    font-weight:500;
+    transition:0.3s;
+}
+
+button:hover {
+    background: #4f46e5;
+}
+
+footer {
+    text-align:center;
+    padding:20px;
+    margin-top:40px;
+    color: var(--text-muted);
+}
+</style>
+
+</head>
+
+<body>
+
+<nav>
+    <h2>CareerForge AI</h2>
+    <div>
+        <a href="/ Resume-Builder-AI/index.html">Home</a>
+        <a href="/ Resume-Builder-AI/resume.html">Resume</a>
+        <a href="/ Resume-Builder-AI/ats.html">ATS</a>
+        <a href="/ Resume-Builder-AI/portfolio.html">Portfolio</a>
+        <a href="/ Resume-Builder-AI/interview.html">Interview</a>
+        <a href="/ Resume-Builder-AI/jobs.html">Jobs</a>
+        <a href="/ Resume-Builder-AI/ai-tools.html">AI Tools</a>
+        <a href="/ Resume-Builder-AI/storytelling.html">Story</a>
+        <a href="/ Resume-Builder-AI/login.html">Login</a>
+    </div>
+</nav>
+
+<div class="container">
+
+<h2>Top AI Tools 🌐</h2>
+
+<div class="grid" id="aiGrid">
+    <p>Loading AI tools...</p>
+</div>
+
+</div>
+
+<footer>
+    © 2026 CareerForge AI
+</footer>
+
+<script>
+// Fetch AI tools from backend
+const aiGrid = document.getElementById("aiGrid");
+
+async function loadAITools() {
+    try {
+        const res = await fetch("https://resume-builder-ai-1.onrender.com/api/ai-tools");
+        if(!res.ok) throw new Error("Failed to fetch AI tools");
+        const tools = await res.json();
+
+        aiGrid.innerHTML = ""; // clear loading text
+
+        tools.forEach(tool => {
+            const card = document.createElement("div");
+            card.className = "card";
+            card.innerHTML = `
+                <h3>${tool.name}</h3>
+                <p>${tool.description}</p>
+                <button onclick="window.open('${tool.url}', '_blank')">Open</button>
+            `;
+            aiGrid.appendChild(card);
+        });
+    } catch (err) {
+        aiGrid.innerHTML = "<p style='color:red'>Failed to load AI tools.</p>";
+        console.error(err);
+    }
+}
+
+// Load tools when page loads
+window.onload = loadAITools;
+</script>
+
+</body>
+</html>
